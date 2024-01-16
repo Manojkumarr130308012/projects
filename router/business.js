@@ -5,7 +5,7 @@ const businessController = require('../controller/business');
 router.post('/add', async (req, res) => {
     res.send(await businessController.add(req.body));
 });
-router.get('/business', async (req, res) => {
+router.get('/', async (req, res) => {
     res.send(await businessController.fetch());
 });
 router.get('/fetchlorders', async (req, res) => {
