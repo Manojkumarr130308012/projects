@@ -9,6 +9,7 @@ server.use(cors());
 
 const businessRouter = require('./../router/business');
 const merchantRouter = require('./../router/merchant');
+const serviceRouter = require('./../router/service');
 
  let db= process.env.MONGODB_URL ||`mongodb+srv://admin:1234@hoffensoft.ohofpb5.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -30,6 +31,7 @@ mongoose.connect(db, {
 
 server.use("/business", businessRouter);
 server.use("/merchant", merchantRouter);
+server.use("/service", serviceRouter);
 
 
 module.exports= server;
