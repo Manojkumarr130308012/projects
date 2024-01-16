@@ -33,7 +33,7 @@ class BusinessController {
 
 	async fetchdata(id){
 		try{
-			let response = await merchantSchema.find({_id:id});
+			let response = await merchantSchema.find({businessId:id});
 			return response;	
 		} catch(error){
 			return {

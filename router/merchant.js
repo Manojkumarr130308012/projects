@@ -8,9 +8,9 @@ router.post('/add', async (req, res) => {
 router.get('/', async (req, res) => {
     res.send(await merchantController.fetch());
 });
-router.get('/fetchlorders', async (req, res) => {
+router.get('/fetchmerchants', async (req, res) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
-	const response = await merchantController.fetchdata(req.query.id);
+	const response = await merchantController.fetchdata(req.query.businessId);
 	res.send(response);
 })
 router.delete('/delete', async (req, res) => {
