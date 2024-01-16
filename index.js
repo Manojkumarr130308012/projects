@@ -87,8 +87,17 @@ app.post("/producth/write", async (req, res) => {
       console.error("Error reading the file:", err);
     } 
 
-   const combinedJson = {...JSON.parse(data),...req.body};
+    let combinedJson;
+    console.log("null",data);
 
+    if(!data){
+      console.log("null",data);
+      combinedJson = req.body;
+    }else{
+       combinedJson = {...JSON.parse(data),...req.body};
+    }
+  
+   console.log("combinedJson",combinedJson);
 
   const jsonString = JSON.stringify(combinedJson, null, 2); // The '2' argument adds indentation for better readability
 
