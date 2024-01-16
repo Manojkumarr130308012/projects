@@ -1,0 +1,154 @@
+{
+  "Business1": [
+    {
+      "Merchant1": [
+        {
+          "fields": [
+            {
+              "field": "username",
+              "req": false
+            },
+            {
+              "field": "password",
+              "req": false
+            }
+          ],
+          "service": "login"
+        },
+        {
+          "fields": [
+            {
+              "field": "username",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            },
+            {
+              "field": "email",
+              "req": true
+            },
+            {
+              "field": "phone",
+              "req": true
+            }
+          ],
+          "service": "register"
+        }
+      ]
+    },
+    {
+      "Merchant2": [
+        {
+          "fields": [
+            {
+              "field": "username",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            }
+          ],
+          "service": "login"
+        }
+      ]
+    }
+  ],
+  "Business2": [
+    {
+      "Merchant1": [
+        {
+          "fields": [
+            {
+              "field": "phone",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            }
+          ],
+          "service": "login"
+        }
+      ]
+    }
+  ],
+  "Business3": [
+    {
+      "Merchant1": [
+        {
+          "fields": [
+            {
+              "field": "email",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            }
+          ],
+          "service": "login"
+        }
+      ]
+    }
+  ],
+  "Business4": [
+    {
+      "Merchant1": [
+        {
+          "fields": [
+            {
+              "field": "PHONE",
+              "req": false
+            },
+            {
+              "field": "password",
+              "req": false
+            }
+          ],
+          "service": "REG"
+        },
+        {
+          "fields": [
+            {
+              "field": "username",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            },
+            {
+              "field": "email",
+              "req": true
+            },
+            {
+              "field": "phone",
+              "req": true
+            }
+          ],
+          "service": "register"
+        }
+      ]
+    },
+    {
+      "Merchant2": [
+        {
+          "fields": [
+            {
+              "field": "username",
+              "req": true
+            },
+            {
+              "field": "password",
+              "req": true
+            }
+          ],
+          "service": "login"
+        }
+      ]
+    }
+  ]
+}

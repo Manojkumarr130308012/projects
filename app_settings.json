@@ -1,0 +1,87 @@
+{
+    "Business1": [
+        {
+            "Merchant1": [
+                {
+                    "fields": [
+                        {
+                            "field":"name","req":true
+                        },
+                        {
+                            "field":"password","req":true
+                        }
+                    ],
+                    "service": "login"
+                },
+                {
+                    "fields": [
+                        {
+                            "field":"name","req":true
+                        },
+                        {
+                            "field":"password","req":true
+                        },{
+                            "field":"email","req":true
+                        },{
+                            "field":"phone","req":true
+                        }
+                    ],
+                    "service": "register"
+                }
+            ]
+            
+        },
+        {
+            "Merchant2": [
+                {
+                    "fields": [
+                        {
+                            "field":"name","req":true
+                        },
+                        {
+                            "field":"password","req":true
+                        }
+                    ],
+                    "service": "login"
+                }
+            ]
+            
+        }
+    ],
+    "Business2": [
+        {
+            "Merchant1": [
+                {
+                    "fields": [
+                        {
+                            "field":"phone","req":true
+                        },
+                        {
+                            "field":"password","req":true
+                        }
+                    ],
+                    "service": "login"
+                }
+            ]
+            
+        }
+    ],
+    "Business3": [
+        {
+            "Merchant1": [
+                {
+                    "fields": [
+                        {
+                            "field":"email","req":true
+                        },
+                        {
+                            "field":"password","req":true
+                        }
+                    ],
+                    "service": "login"
+                }
+            ]
+            
+        }
+    ]
+}
