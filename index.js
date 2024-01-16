@@ -12,7 +12,7 @@ const { config } = require("dotenv");
 let jsonData;
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
   })
 );
 app.use(express.json({ limit: "50mb" }));
