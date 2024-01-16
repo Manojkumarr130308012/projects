@@ -43,6 +43,10 @@ const { Console } = require("console");
 app.use(middleware);
 
 
+app.get("/get",async(req,res) => {
+  res.json({state:"sucesss"})
+});
+
 app.post("/producth", async (req, res) => {
   const filePath = "./app_settings.json";
 
