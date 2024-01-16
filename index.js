@@ -80,15 +80,12 @@ app.post("/producth", async (req, res) => {
 
 
 app.post("/producth/write", async (req, res) => {
-  const filePath = "./write.json";
-
+  const filePath = "./app_settings.json";
 
   fs.readFile(filePath, "utf-8", async (err, data) => {
     if (err) {
       console.error("Error reading the file:", err);
     } 
-
-
 
    const combinedJson = {...JSON.parse(data),...req.body};
 
@@ -106,6 +103,21 @@ app.post("/producth/write", async (req, res) => {
   });
 
 });
+
+});
+
+
+app.post("/producth/read", async (req, res) => {
+  const filePath = "./app_settings.json";
+
+  fs.readFile(filePath, "utf-8", async (err, data) => {
+    if (err) {
+      console.error("Error reading the file:", err);
+    } else{
+      console.error("success", data);
+
+    }
+   });
 
 });
 
