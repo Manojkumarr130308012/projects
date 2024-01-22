@@ -55,8 +55,7 @@ app.post("/producth/:service_id", async (req, res) => {
 
   file.download()
     .then((data) => {
-      const jsonContent = JSON.parse(data[0].toString());
-    
+      const jsonContent = JSON.parse(data[0].toString());    
       if (req.body != null) {
         let body = req.body;
         let client_id = req.headers.client_id;
@@ -66,54 +65,79 @@ app.post("/producth/:service_id", async (req, res) => {
 
         let requiredFieldFilter;
         let requiredService;
+        console.log("fieldFilter", fieldFilter.length);
 
+        if(fieldFilter.length == 0){
+          res.json({state:"Failure",data: "Unknow field Found!!!"});
+        }
+        else if(fieldFilter.length > 1){
 
-        if(fieldFilter.length > 1){
           const matchingObject = filtered.find(obj =>
             obj.fields.every(field => body[field.field] !== undefined)
           );
           requiredFieldFilter = matchingObject?.fields.filter(f => f.required === true && (body[f.field] == null || body[f.field] == ""));
           requiredService = matchingObject?.service;
+
+          if(requiredFieldFilter?.length == 0){
+            let serviceUrl = paths.find(ser => ser.service == requiredService);
+   
+            console.log(req.body)
+   
+            const headers = {
+             'Content-Type': 'application/json',
+           };
+   
+           req.body.client_id = client_id;
+           if(serviceUrl.service == requiredService){
+             axios.post(serviceUrl.host,req.body,{headers})
+             .then(response => {
+               // Handle the response from the API
+               res.json({data: response.data })
+             })
+             .catch(error => {
+               // Handle errors
+               res.json({state:"Failure",data:  error.message})
+             });
+           }
+           }else{
+             res.json({state:"Failure",data: requiredFieldFilter})
+           }
         }else {
           requiredFieldFilter = fieldFilter[0].fields.filter(f => f.required === true && (body[f.field] == null || body[f.field] == ""));
           requiredService = fieldFilter[0]?.service;
+
+          if(requiredFieldFilter?.length == 0){
+            let serviceUrl = paths.find(ser => ser.service == requiredService);
+   
+            console.log(req.body)
+   
+            const headers = {
+             'Content-Type': 'application/json',
+           };
+   
+           req.body.client_id = client_id;
+           if(serviceUrl.service == requiredService){
+             axios.post(serviceUrl.host,req.body,{headers})
+             .then(response => {
+               // Handle the response from the API
+               res.json({data: response.data })
+             })
+             .catch(error => {
+               // Handle errors
+               res.json({state:"Failure",data:  error.message})
+             });
+           }
+           }else{
+             res.json({state:"Failure",data: requiredFieldFilter})
+           }
         }
 
-      
-        console.log("requiredFieldFilter", requiredFieldFilter);
-        console.log("requiredService", requiredService);
-
-
-        if(requiredFieldFilter?.length == 0){
-         let serviceUrl = paths.find(ser => ser.service == requiredService);
-
-         console.log(req.body)
-
-         const headers = {
-          'Content-Type': 'application/json',
-        };
-
-        req.body.client_id = client_id;
-        if(serviceUrl.service == requiredService){
-          axios.post(serviceUrl.host,req.body,{headers})
-          .then(response => {
-            // Handle the response from the API
-            res.json({data: response.data })
-          })
-          .catch(error => {
-            // Handle errors
-            res.json({state:"Failure",data:  error.message})
-          });
-        }
-        }else{
-          res.json({state:"Failure",data: requiredFieldFilter})
-        }
+       
       }
     })
     .catch((error) => {
       res.send(error);
     });
-  //   if (err) {
   //     console.error("Error reading the file:", err);
   //   }
   //   if (req.body != null) {
@@ -221,7 +245,7 @@ console.log(serviceUrl.host+"?"+querystring.stringify(Querystring));
   'Content-Type': 'application/json',
 };
 
- axios.put(serviceUrl.host+"/"+Querystring.id,req.body,{headers})
+ axios.put(serviceUrl.host+"/"+Querystring._id,req.body,{headers})
          .then(response => {
            // Handle the response from the API
      
@@ -253,7 +277,7 @@ app.delete("/producth/:service_id", async (req, res) => {
 };
 
 
- axios.delete(serviceUrl.host+"/"+Querystring.id,req.body,{headers})
+ axios.delete(serviceUrl.host+"/"+Querystring._id,req.body,{headers})
          .then(response => {
            // Handle the response from the API
            if(response.data != ""){
@@ -269,7 +293,7 @@ app.delete("/producth/:service_id", async (req, res) => {
          });
 });
 
-app.post("/producth/write1", async (req, res) => {
+app.post("/product/firebase/write1", async (req, res) => {
   const file = bucket.file('app_settings.json');
 
   file.download()
@@ -316,20 +340,18 @@ app.post("/producth/write1", async (req, res) => {
 
 });
 
-app.post("/producth/read1", async (req, res) => {
+app.post("/product/firebase/read1", async (req, res) => {
   const file = bucket.file('app_settings.json');
 
   file.download()
     .then((data) => {
-      console.log(data)
-      const jsonContent = JSON.parse(data[0].toString());
+      const jsonContent = JSON.parse(data[0].toString()); 
       console.log(jsonContent)
       res.send(jsonContent)
     })
     .catch((error) => {
-      res.send(error);
+       res.send(error)
     });
-
 });
 
 
