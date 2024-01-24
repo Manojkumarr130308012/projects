@@ -61,60 +61,24 @@ app.post("/producth/:service_id", async (req, res) => {
         let client_id = req.headers.client_id;
         removeValues(body, [client_id])
         let filtered = jsonContent[client_id];
-        let fieldFilter = filtered.filter(data => data?.fields?.length === Object.keys(body).length);
 
+        console.log("filtered", filtered);
+        const serviceId = req.params.service_id;
+        console.log(serviceId);
+        let fieldFilter = filtered.filter(data => data?.service == serviceId && data?.method == req.method);
         let requiredFieldFilter;
         let requiredService;
-        console.log("fieldFilter", fieldFilter.length);
+        console.log("fieldFilter", fieldFilter);
 
-        if(fieldFilter.length == 0){
-          res.json({state:"Failure",data: "Unknow field Found!!!"});
-        }
-        else if(fieldFilter.length > 1){
+       let serviceUrl = paths.find(ser => ser.service == serviceId && ser.method == req.method);
 
-          const matchingObject = filtered.find(obj =>
-            obj.fields.every(field => body[field.field] !== undefined)
-          );
-          requiredFieldFilter = matchingObject?.fields.filter(f => f.required === true && (body[f.field] == null || body[f.field] == ""));
-          requiredService = matchingObject?.service;
-
-          if(requiredFieldFilter?.length == 0){
-            let serviceUrl = paths.find(ser => ser.service == requiredService);
-   
-            console.log(req.body)
-   
-            const headers = {
-             'Content-Type': 'application/json',
-           };
-   
-           req.body.client_id = client_id;
-           if(serviceUrl.service == requiredService){
-             axios.post(serviceUrl.host,req.body,{headers})
-             .then(response => {
-               // Handle the response from the API
-               res.json({data: response.data })
-             })
-             .catch(error => {
-               // Handle errors
-               res.json({state:"Failure",data:  error.message})
-             });
-           }
-           }else{
-             res.json({state:"Failure",data: requiredFieldFilter})
-           }
-        }else {
           requiredFieldFilter = fieldFilter[0].fields.filter(f => f.required === true && (body[f.field] == null || body[f.field] == ""));
           requiredService = fieldFilter[0]?.service;
 
           if(requiredFieldFilter?.length == 0){
-            let serviceUrl = paths.find(ser => ser.service == requiredService);
-   
-            console.log(req.body)
-   
             const headers = {
              'Content-Type': 'application/json',
            };
-   
            req.body.client_id = client_id;
            if(serviceUrl.service == requiredService){
              axios.post(serviceUrl.host,req.body,{headers})
@@ -130,7 +94,7 @@ app.post("/producth/:service_id", async (req, res) => {
            }else{
              res.json({state:"Failure",data: requiredFieldFilter})
            }
-        }
+        // }
 
        
       }
@@ -302,7 +266,6 @@ app.post("/product/firebase/write1", async (req, res) => {
       if (data.toString()) {
         const jsonContent = JSON.parse(data[0].toString());
         if (!jsonContent) {
-          console.log("null", jsonContent);
           combinedJson = req.body;
         } else {
           combinedJson = { ...jsonContent, ...req.body };
@@ -320,9 +283,7 @@ app.post("/product/firebase/write1", async (req, res) => {
           });
       } else {
         combinedJson = req.body;
-
-        console.log("combinedJson", combinedJson)
-        file.save(JSON.stringify(combinedJson))
+       file.save(JSON.stringify(combinedJson))
           .then(() => {
             res.send("JSON file saved to Firebase Storage.")
           })
@@ -408,6 +369,45 @@ app.post("/producth/read", async (req, res) => {
 });
 
 
+app.post("/product/firebase/update", async (req, res) => {
+  const file = bucket.file('app_settings.json');
+  let client_id;
+  client_id = req.headers.client_id;
+  file.download()
+    .then((data) => {
+      let combinedJson;
+      if (data.toString()) {
+        const jsonContent = JSON.parse(data[0].toString());
+        let filtered = jsonContent[client_id];
+        console.log("method",req.body.method);
+        console.log("service",req.body.service);
+
+        const objecttoremove = filtered.find(entry => entry.method === req.body.method && entry.service === req.body.service);
+        console.log("service",objecttoremove);
+
+    if (objecttoremove) {
+      // Edit the fields object for the specified method
+      const updatedArray = filtered.filter(obj => obj !== objecttoremove);
+      updatedArray.push(req.body);
+      let jsonData ={[client_id]:updatedArray}
+      console.log("updatedArray",jsonData);
+      const jsonString = JSON.stringify(jsonData, null, 2); // The '2' argument adds indentation for better readability
+      file.save(jsonString)
+        .then(() => {
+          res.send("JSON file saved to Firebase Storage.")
+        })
+        .catch((error) => {
+          res.send(error)
+        });
+      
+    } else {
+      console.error(`Method not found for service ID`);
+    }
+      }});
+
+});
+
+
 function removeValues(obj, valuesToRemove) {
   // Recursively remove values from the object
   const removeFields = (obj) => {
@@ -422,9 +422,6 @@ function removeValues(obj, valuesToRemove) {
 
   removeFields(obj);
 }
-
-
-
 
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
