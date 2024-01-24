@@ -2,7 +2,7 @@ class ErrorHandler{
 	parseMongoError(error){		
 
 		
-		let errorMsg = 'Something went wrong';
+		let errorMsg = 'Something  wrong';
 
 		switch(error.code){			
 			case 11000:
