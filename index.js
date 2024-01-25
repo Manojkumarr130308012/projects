@@ -93,10 +93,7 @@ app.post("/producth/:service_id", async (req, res) => {
            }
            }else{
              res.error({state:"Failure",data: requiredFieldFilter})
-           }
-        // }
-
-       
+           }  
       }
     })
     .catch((error) => {
