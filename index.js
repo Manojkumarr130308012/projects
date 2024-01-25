@@ -84,16 +84,19 @@ app.post("/producth/:service_id", async (req, res) => {
              axios.post(serviceUrl.host,req.body,{headers})
              .then(response => {
                // Handle the response from the API
-               res.json({status:"success",data: response.data })
+               res.json({data: response.data })
              })
              .catch(error => {
                // Handle errors
-               res.json({status:"faliure",data:  error.message})
+               res.error({state:"Failure",data:  error.message})
              });
            }
            }else{
-             res.json({status:"faliure",data: requiredFieldFilter})
-           }  
+             res.error({state:"Failure",data: requiredFieldFilter})
+           }
+        // }
+
+       
       }
     })
     .catch((error) => {
