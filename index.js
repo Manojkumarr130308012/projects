@@ -88,11 +88,11 @@ app.post("/producth/:service_id", async (req, res) => {
              })
              .catch(error => {
                // Handle errors
-               res.error({state:"Failure",data:  error.message})
+               res.json({state:"Failure",data:  error.message})
              });
            }
            }else{
-             res.error({state:"Failure",data: requiredFieldFilter})
+             res.json({state:"Failure",data: requiredFieldFilter})
            }
         // }
 
